@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENCORE – ECE Tech Fest · 13th March</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+:root{
+  --white:#FFFFFF;
+  --bg:#F4F7FF;
+  --bg2:#EDF1FF;
+  --electric:#3B6EF0;
+  --electric-lt:#EBF0FF;
+  --electric-mid:#C5D4FD;
+  --volt:#22C55E;
+  --volt-lt:#DCFCE7;
+  --amber:#F59E0B;
+  --amber-lt:#FEF3C7;
+  --coral:#EF4444;
+  --purple:#8B5CF6;
+  --purple-lt:#F3EFFE;
+  --text:#0F172A;
+  --text2:#334155;
+  --text3:#64748B;
+  --border:rgba(59,110,240,0.13);
+  --sh:0 4px 24px rgba(59,110,240,0.10);
+  --shlg:0 12px 48px rgba(59,110,240,0.18);
+}
+
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* ── CIRCUIT BG ── */
+.cbg{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:52px 52px;opacity:0.55}
+.cbg::after{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(59,110,240,0.22) 1.5px,transparent 1.5px);
+  background-size:52px 52px}
+
+/* ── PAGE SYSTEM ── */
+.page{min-height:100vh;position:fixed;inset:0;overflow-y:auto;
+  opacity:0;pointer-events:none;transform:translateY(22px);
+  transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.page.active{opacity:1;pointer-events:all;transform:translateY(0);position:relative}
+.page.exit{opacity:0;transform:translateY(-22px);pointer-events:none;position:fixed;inset:0}
+
+/* ── NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:999;
+  display:flex;justify-content:center;padding-bottom:1.1rem;pointer-events:none}
+.npill{pointer-events:all;display:flex;background:var(--text);
+  border-radius:100px;box-shadow:0 8px 32px rgba(15,23,42,.22);overflow:hidden;padding:4px;gap:3px}
+.nbtn{padding:.55rem 1.6rem;border:none;border-radius:100px;
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .3s;
+  background:transparent;color:rgba(255,255,255,.38);display:flex;align-items:center;gap:.35rem}
+.nbtn.active{background:var(--white);color:var(--text)}
+.nbtn svg{width:13px;height:13px;flex-shrink:0}
+
+/* ═══════════════ HOME ═══════════════ */
+#page-home{background:var(--bg);padding-bottom:6rem}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2rem;border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.85);backdrop-filter:blur(14px);
+  position:sticky;top:0;z-index:10}
+.topbar-brand{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;
+  letter-spacing:3px;color:var(--electric);text-transform:uppercase;
+  display:flex;align-items:center;gap:.5rem}
+.topbar-dot{width:7px;height:7px;border-radius:50%;background:var(--volt);animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.topbar-date{font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--electric);background:var(--electric-lt);border:1px solid var(--electric-mid);
+  padding:.28rem .8rem;border-radius:100px;letter-spacing:1px}
+
+/* hero */
+.hero{position:relative;z-index:1;padding:4.5rem 2rem 2rem;max-width:960px;margin:0 auto;text-align:center}
+
+.htag{display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:100px;padding:.38rem 1rem;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:2px;
+  color:var(--electric);text-transform:uppercase;margin-bottom:2rem;
+  box-shadow:var(--sh);animation:popIn .6s .15s both}
+
+/* ENCORE */
+.encore-title{font-family:'Syne',sans-serif;font-size:clamp(5rem,19vw,13rem);
+  font-weight:800;line-height:.88;letter-spacing:-5px;
+  display:inline-block;position:relative;margin-bottom:.4rem}
+.encore-title .l{display:inline-block;animation:lRise .55s both}
+.encore-title .l1{color:var(--electric);animation-delay:.3s}
+.encore-title .l2{color:var(--text);animation-delay:.38s}
+.encore-title .l3{color:var(--volt);animation-delay:.46s}
+.encore-title .l4{color:var(--text);animation-delay:.54s}
+.encore-title .l5{color:var(--amber);animation-delay:.62s}
+.encore-title .l6{color:var(--electric);animation-delay:.70s}
+@keyframes lRise{from{opacity:0;transform:translateY(48px) skewY(5deg)}to{opacity:1;transform:none}}
+
+.scanline{height:3px;width:0;margin:.5rem auto 0;
+  background:linear-gradient(90deg,var(--electric),var(--volt),var(--amber));
+  border-radius:3px;animation:scanExp .8s 1s both}
+@keyframes scanExp{from{width:0}to{width:52%}}
+
+.date-row{margin-top:1.8rem;display:flex;align-items:center;justify-content:center;
+  gap:.8rem;flex-wrap:wrap;animation:popIn .6s .85s both}
+.dbadge{background:var(--electric);color:var(--white);
+  font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;
+  padding:.55rem 1.8rem;border-radius:100px;letter-spacing:.5px;
+  box-shadow:0 4px 22px rgba(59,110,240,.32)}
+.deptbadge{background:var(--white);border:1.5px solid var(--border);
+  color:var(--text2);font-size:.82rem;font-weight:600;
+  padding:.55rem 1.3rem;border-radius:100px;box-shadow:var(--sh)}
+
+.hero-sub{margin-top:1.1rem;font-size:.92rem;color:var(--text3);line-height:1.6;
+  animation:popIn .6s 1.05s both}
+
+.ctas{margin-top:2.2rem;display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;animation:popIn .6s 1.25s both}
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.75rem 1.9rem;border-radius:100px;
+  font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;
+  cursor:pointer;transition:all .3s;border:none;letter-spacing:.2px}
+.btn-e{background:var(--electric);color:var(--white);box-shadow:0 4px 20px rgba(59,110,240,.28)}
+.btn-e:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(59,110,240,.36)}
+.btn-g{background:var(--white);color:var(--text);border:1.5px solid var(--border);box-shadow:var(--sh)}
+.btn-g:hover{transform:translateY(-2px);border-color:var(--electric)}
+
+@keyframes popIn{from{opacity:0;transform:scale(.93) translateY(12px)}to{opacity:1;transform:none}}
+
+/* ticker */
+.ticker-wrap{margin-top:3.2rem;position:relative;z-index:1;animation:popIn .6s 1.45s both}
+.tlabel{text-align:center;margin-bottom:.9rem;font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;letter-spacing:3px;color:var(--text3);text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:.5rem}
+.tlabel::before,.tlabel::after{content:'';flex:1;max-width:55px;height:1px;background:var(--border)}
+.trow{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;padding:0 .5rem}
+.tcard{width:84px;height:84px;border-radius:14px;overflow:hidden;
+  border:2.5px solid var(--white);box-shadow:var(--sh);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;background:var(--white);transition:all .3s;
+  cursor:pointer;flex-shrink:0}
+.tcard:nth-child(2){transform:rotate(-4deg) translateY(-5px)}
+.tcard:nth-child(3){transform:rotate(3deg)  translateY( 4px)}
+.tcard:nth-child(4){transform:rotate(-2deg) translateY(-3px)}
+.tcard:nth-child(5){transform:rotate(4deg)  translateY( 6px)}
+.tcard:hover{transform:scale(1.12) rotate(0deg) !important;z-index:5;box-shadow:var(--shlg)}
+.tcard img{width:100%;height:100%;object-fit:cover}
+
+/* chips */
+.chips{display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap;
+  margin-top:2.8rem;position:relative;z-index:1;animation:popIn .6s 1.65s both}
+.chip{display:flex;align-items:center;gap:.35rem;padding:.45rem .95rem;
+  border-radius:100px;font-size:.77rem;font-weight:500;border:1px solid transparent}
+.cb{background:var(--electric-lt);color:var(--electric);border-color:var(--electric-mid)}
+.cg{background:var(--volt-lt);color:#15803D;border-color:rgba(34,197,94,.3)}
+.ca{background:var(--amber-lt);color:#B45309;border-color:rgba(245,158,11,.3)}
+.cp{background:var(--purple-lt);color:#6D28D9;border-color:rgba(139,92,246,.3)}
+
+/* waveform */
+.wavesvg{max-width:580px;margin:2.5rem auto 0;padding:0 1.5rem;
+  opacity:.3;position:relative;z-index:1;animation:popIn .6s 1.85s both}
+.wavesvg svg{width:100%;height:36px}
+
+/* ECE badges row */
+.ece-badges{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;
+  margin-top:2rem;position:relative;z-index:1;animation:popIn .6s 2.05s both}
+.ebadge{background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:.6rem 1rem;font-size:.78rem;font-weight:600;color:var(--text2);
+  box-shadow:var(--sh);display:flex;align-items:center;gap:.4rem;transition:all .25s}
+.ebadge:hover{border-color:var(--electric);transform:translateY(-2px);box-shadow:var(--shlg)}
+
+/* ═══════════════ MEMORIES ═══════════════ */
+#page-memories{background:var(--bg2);padding-bottom:7rem}
+
+.mtopbar{background:rgba(255,255,255,.9);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);padding:1.2rem 2rem;
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between}
+.mtopbar-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:var(--text)}
+.mtopbar-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  color:var(--electric);letter-spacing:2px;text-transform:uppercase;margin-top:.1rem}
+.mcnt{background:var(--electric);color:var(--white);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;
+  padding:.28rem .9rem;border-radius:100px;min-width:36px;text-align:center}
+
+/* upload */
+.upload-card{max-width:660px;margin:2rem auto 0;padding:0 1.5rem}
+.upload-inner{background:var(--white);border-radius:20px;border:1.5px solid var(--border);box-shadow:var(--sh);overflow:hidden}
+.uzone{padding:2rem;text-align:center;border-bottom:1.5px dashed rgba(59,110,240,.18);
+  cursor:pointer;position:relative;transition:all .25s;
+  background:linear-gradient(135deg,rgba(59,110,240,.025),rgba(34,197,94,.025))}
+.uzone:hover,.uzone.dov{background:linear-gradient(135deg,rgba(59,110,240,.07),rgba(34,197,94,.05));border-color:var(--electric);transform:scale(1.005)}
+.uzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uicon{width:54px;height:54px;border-radius:50%;background:var(--electric-lt);
+  border:1.5px solid var(--electric-mid);margin:0 auto .8rem;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all .25s}
+.uzone:hover .uicon{background:var(--electric);transform:scale(1.05)}
+.uzone h3{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.2rem}
+.uzone p{font-size:.77rem;color:var(--text3)}
+
+.pstrip{display:none;gap:.5rem;flex-wrap:wrap;padding:.75rem 1.1rem;border-bottom:1px solid var(--border)}
+.pstrip.show{display:flex}
+.pthumb{width:62px;height:62px;border-radius:10px;overflow:hidden;position:relative;
+  border:2px solid var(--white);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.pthumb img{width:100%;height:100%;object-fit:cover}
+.pthumb .prm{position:absolute;top:2px;right:2px;width:17px;height:17px;border-radius:50%;
+  background:rgba(239,68,68,.88);color:var(--white);border:none;font-size:.55rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .15s}
+.pthumb:hover .prm{opacity:1}
+
+.ufooter{display:flex;gap:.55rem;align-items:center;padding:.85rem 1.1rem}
+.ninp{flex:1;padding:.62rem 1rem;border-radius:100px;border:1.5px solid var(--border);
+  font-family:'Space Grotesk',sans-serif;font-size:.87rem;color:var(--text);
+  outline:none;background:var(--bg);transition:border-color .2s}
+.ninp:focus{border-color:var(--electric);background:var(--white)}
+.ninp::placeholder{color:var(--text3)}
+.pbtn{padding:.62rem 1.4rem;border-radius:100px;background:var(--electric);color:var(--white);
+  border:none;font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;
+  cursor:pointer;transition:all .25s;white-space:nowrap;box-shadow:0 3px 14px rgba(59,110,240,.28)}
+.pbtn:hover{background:#2853C5;transform:translateY(-1px)}
+
+/* wall */
+.whead{display:flex;align-items:center;justify-content:space-between;
+  max-width:660px;margin:2.2rem auto .7rem;padding:0 1.5rem}
+.whead h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--text)}
+.whead span{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);letter-spacing:1px}
+
+.mwall{max-width:900px;margin:0 auto;padding:0 1.5rem 2rem;columns:3 180px;column-gap:.85rem}
+
+.mcard{break-inside:avoid;margin-bottom:.85rem;border-radius:16px;overflow:hidden;
+  position:relative;cursor:pointer;background:var(--white);
+  border:1px solid rgba(0,0,0,.04);box-shadow:0 2px 14px rgba(15,23,42,.06);
+  transition:all .4s cubic-bezier(.22,1,.36,1);animation:cardIn .5s both}
+.mcard:hover{transform:translateY(-5px);box-shadow:0 14px 44px rgba(59,110,240,.15)}
+@keyframes cardIn{from{opacity:0;transform:scale(.88) translateY(18px)}to{opacity:1;transform:none}}
+.mcard img{width:100%;display:block;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.mcard:hover img{transform:scale(1.06)}
+
+.movl{position:absolute;bottom:0;left:0;right:0;padding:.8rem .75rem .65rem;
+  background:linear-gradient(to top,rgba(15,23,42,.75),transparent);
+  transform:translateY(101%);transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.mcard:hover .movl{transform:translateY(0)}
+.movl-name{font-size:.77rem;font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.movl-time{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.6);margin-top:.12rem}
+
+.lbtn{position:absolute;top:.52rem;right:.52rem;width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.85);border:none;font-size:.78rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:all .2s;backdrop-filter:blur(4px);box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.mcard:hover .lbtn{opacity:1}
+.lbtn.on{opacity:1;background:rgba(239,68,68,.12)}
+
+.ecetag{position:absolute;top:.52rem;left:.52rem;background:var(--electric);color:var(--white);
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;font-weight:700;letter-spacing:1px;
+  padding:.18rem .48rem;border-radius:100px;text-transform:uppercase;
+  opacity:0;transition:opacity .2s}
+.mcard:hover .ecetag{opacity:1}
+
+/* empty */
+.ewall{column-span:all;max-width:380px;margin:2.5rem auto;text-align:center;
+  padding:2.8rem 2rem;background:var(--white);border-radius:20px;
+  border:1.5px dashed var(--electric-mid);box-shadow:var(--sh)}
+.ewall .ei{font-size:3rem;margin-bottom:.9rem}
+.ewall h3{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:.45rem}
+.ewall p{font-size:.82rem;color:var(--text3);line-height:1.6}
+.ewall .ehint{margin-top:.9rem;display:inline-flex;align-items:center;gap:.35rem;
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;
+  color:var(--electric);text-transform:uppercase}
+
+/* ── LIGHTBOX ── */
+.lb{position:fixed;inset:0;z-index:2000;background:rgba(15,23,42,.92);
+  backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:1rem;padding:1.5rem;
+  opacity:0;pointer-events:none;transition:opacity .3s}
+.lb.open{opacity:1;pointer-events:all}
+.lbwrap{position:relative;transform:scale(.9);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.lb.open .lbwrap{transform:scale(1)}
+.lb img{max-width:90vw;max-height:78vh;border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);display:block}
+.lbbar{display:flex;align-items:center;gap:1.2rem;
+  background:rgba(255,255,255,.08);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.1);border-radius:100px;
+  padding:.5rem 1.4rem;color:var(--white);font-size:.82rem}
+.lbname{font-weight:600}
+.lbtime{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.5)}
+.lbclose{position:absolute;top:1.1rem;right:1.1rem;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  color:var(--white);font-size:1rem;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:background .2s}
+.lbclose:hover{background:rgba(239,68,68,.45)}
+.lbnav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;
+  border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:all .2s}
+.lbnav:hover{background:rgba(59,110,240,.5)}
+.lbprev{left:-50px}.lbnext{right:-50px}
+
+/* toast */
+.toast{position:fixed;bottom:5.3rem;left:50%;transform:translateX(-50%);
+  background:var(--text);color:var(--white);padding:.6rem 1.4rem;border-radius:100px;
+  font-size:.82rem;font-weight:500;z-index:5000;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(15,23,42,.22);
+  animation:tIn .3s cubic-bezier(.22,1,.36,1);display:flex;align-items:center;gap:.45rem}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:600px){
+  .encore-title{letter-spacing:-2px}
+  .mwall{columns:2 130px;column-gap:.6rem}
+  .tcard{width:68px;height:68px}
+  .lbprev,.lbnext{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cbg"></div>
+
+<!-- ══════════ PAGE 1: HOME ══════════ -->
+<div class="page active" id="page-home">
+
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-dot"></span>
+      ⚡ ECE Tech Fest
+    </div>
+    <div class="topbar-date">13 MAR 2025</div>
+  </div>
+
+  <section class="hero">
+
+    <div class="htag">
+      <span class="topbar-dot"></span>
+      Department of Electronics &amp; Communication Engineering
+    </div>
+
+    <div class="encore-title" id="encoreTitle"></div>
+    <div class="scanline"></div>
+
+    <div class="date-row">
+      <div class="dbadge">13th March</div>
+      <div class="deptbadge">🔌 ECE Tech Fest 2025</div>
+    </div>
+
+    <p class="hero-sub">Where circuits meet culture — celebrate every signal, every spark, every ECE memory.</p>
+
+    <div class="ctas">
+      <button class="btn btn-e" onclick="goTo('memories')">📸 &nbsp;View Memories</button>
+      <button class="btn btn-g" onclick="goTo('memories')">Upload Yours →</button>
+    </div>
+
+    <!-- Live ticker -->
+    <div class="ticker-wrap">
+      <div class="tlabel">Live from ENCORE</div>
+      <div class="trow" id="tickerRow">
+        <div class="tcard" style="background:var(--electric-lt)">⚡</div>
+        <div class="tcard" style="background:var(--volt-lt)">🔬</div>
+        <div class="tcard" style="background:var(--amber-lt)">📡</div>
+        <div class="tcard" style="background:var(--purple-lt)">🎓</div>
+        <div class="tcard" style="background:var(--electric-lt)">🔌</div>
+      </div>
+    </div>
+
+    <!-- Feature chips -->
+    <div class="chips">
+      <span class="chip cb">⚡ Circuits &amp; Code</span>
+      <span class="chip cg">📡 Signal Processing</span>
+      <span class="chip ca">🏆 Tech Competitions</span>
+      <span class="chip cp">🎓 ECE Memories</span>
+    </div>
+
+    <!-- ECE topic badges -->
+    <div class="ece-badges">
+      <div class="ebadge">🔧 VLSI Design</div>
+      <div class="ebadge">📶 Wireless Comm</div>
+      <div class="ebadge">🤖 Embedded Systems</div>
+      <div class="ebadge">🌐 IoT Projects</div>
+      <div class="ebadge">💡 PCB Design</div>
+      <div class="ebadge">📊 DSP Lab</div>
+    </div>
+
+    <!-- Signal waveform -->
+    <div class="wavesvg">
+      <svg viewBox="0 0 580 36" fill="none">
+        <polyline points="0,18 28,18 36,4 44,32 52,4 60,32 68,18 108,18 116,8 124,28 132,8 140,28 148,18 196,18 204,2 212,34 220,2 228,34 236,18 280,18 288,12 296,24 304,12 312,24 320,18 368,18 376,6 384,30 392,6 400,30 408,18 452,18 460,10 468,26 476,10 484,26 492,18 536,18 544,4 552,32 560,4 568,32 576,18 580,18"
+          stroke="var(--electric)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+  </section>
+</div>
+
+<!-- ══════════ PAGE 2: MEMORIES ══════════ -->
+<div class="page" id="page-memories">
+
+  <div class="mtopbar">
+    <div>
+      <div class="mtopbar-title">ECE Memories</div>
+      <div class="mtopbar-sub">ENCORE · 13th March 2025</div>
+    </div>
+    <div class="mcnt" id="mcnt">0</div>
+  </div>
+
+  <!-- Upload -->
+  <div class="upload-card">
+    <div class="upload-inner">
+      <div class="uzone" id="dropZone">
+        <input type="file" multiple accept="image/*" id="fileInput" onchange="handleFiles(this.files)">
+        <div class="uicon">📷</div>
+        <h3>Drop your ECE moments here</h3>
+        <p>Tap to choose photos &nbsp;·&nbsp; JPG / PNG / WebP</p>
+      </div>
+      <div class="pstrip" id="pstrip"></div>
+      <div class="ufooter">
+        <input type="text" class="ninp" id="uname" placeholder="Your name &amp; year (e.g. Arjun — ECE 3rd yr)" maxlength="55">
+        <button class="pbtn" onclick="postMems()">Post ⚡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wall -->
+  <div class="whead">
+    <h3>Memory Wall</h3>
+    <span id="wcnt">— photos</span>
+  </div>
+  <div class="mwall" id="mwall">
+    <div class="ewall" id="ewall">
+      <div class="ei">🔌</div>
+      <h3>No signals yet!</h3>
+      <p>Be the first ECE student to upload a memory from ENCORE. Start the wall!</p>
+      <div class="ehint">⚡ Upload · Connect · Remember</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bnav">
+  <div class="npill">
+    <button class="nbtn active" id="btn-home" onclick="goTo('home')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5L1 7h2v7h4v-4h2v4h4V7h2z"/></svg>
+      Home
+    </button>
+    <button class="nbtn" id="btn-memories" onclick="goTo('memories')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.2"/><rect x="9" y="1" width="6" height="6" rx="1.2"/><rect x="1" y="9" width="6" height="6" rx="1.2"/><rect x="9" y="9" width="6" height="6" rx="1.2"/></svg>
+      Memories
+    </button>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="lbBg(event)">
+  <button class="lbclose" onclick="closeLb()">✕</button>
+  <div class="lbwrap">
+    <button class="lbnav lbprev" onclick="lbNav(-1)">‹</button>
+    <img id="lbImg" src="" alt="">
+    <button class="lbnav lbnext" onclick="lbNav(1)">›</button>
+  </div>
+  <div class="lbbar">
+    <span class="lbname" id="lbName"></span>
+    <span class="lbtime" id="lbTime"></span>
+  </div>
+</div>
+
+<script>
+let pending=[], mems=[], liked=new Set(), lbIdx=-1;
+
+/* ── TITLE ── */
+'ENCORE'.split('').forEach((c,i)=>{
+  const s=document.createElement('span');
+  s.className='l l'+(i+1); s.textContent=c;
+  document.getElementById('encoreTitle').appendChild(s);
+});
+
+/* ── PAGE TRANSITION ── */
+function goTo(name){
+  const from=document.querySelector('.page.active');
+  const to=document.getElementById('page-'+name);
+  if(!from||from===to)return;
+  from.classList.add('exit'); from.classList.remove('active');
+  to.style.cssText='opacity:0;transform:translateY(22px)';
+  to.classList.add('active');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    to.style.transition='opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)';
+    to.style.opacity='1'; to.style.transform='translateY(0)';
+    if(name==='memories') to.scrollTop=0;
+  }));
+  setTimeout(()=>{ from.classList.remove('exit'); to.style.cssText=''; },700);
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+name).classList.add('active');
+}
+
+/* ── FILES ── */
+function handleFiles(files){
+  Array.from(files).forEach(f=>{
+    if(!f.type.startsWith('image/'))return;
+    const r=new FileReader();
+    r.onload=e=>{pending.push(e.target.result);renderPending();};
+    r.readAsDataURL(f);
+  });
+  document.getElementById('fileInput').value='';
+}
+function renderPending(){
+  const s=document.getElementById('pstrip');
+  s.className='pstrip'+(pending.length?' show':'');
+  s.innerHTML=pending.map((src,i)=>`
+    <div class="pthumb">
+      <img src="${src}" alt="">
+      <button class="prm" onclick="rmPending(${i})">✕</button>
+    </div>`).join('');
+}
+function rmPending(i){pending.splice(i,1);renderPending();}
+
+/* ── DRAG DROP ── */
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dov');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dov'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dov');handleFiles(e.dataTransfer.files);});
+
+/* ── POST ── */
+function postMems(){
+  if(!pending.length){toast('Select photos first 📸');return;}
+  const name=document.getElementById('uname').value.trim()||'ECE Student';
+  const now=new Date();
+  const t=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+' · 13 Mar';
+  pending.forEach(src=>mems.unshift({src,name,t}));
+  pending=[];
+  document.getElementById('uname').value='';
+  renderPending(); renderWall(); updateTicker(); updateCounts();
+  toast(`⚡ ${mems.length===1?'1 memory':mems.length+' memories'} live on the wall!`);
+}
+
+/* ── WALL ── */
+function renderWall(){
+  const w=document.getElementById('mwall');
+  if(!mems.length){
+    w.innerHTML=`<div class="ewall">
+      <div class="ei">🔌</div><h3>No signals yet!</h3>
+      <p>Be the first ECE student to upload a memory from ENCORE. Start the wall!</p>
+      <div class="ehint">⚡ Upload · Connect · Remember</div>
+    </div>`; return;
+  }
+  w.innerHTML=mems.map((m,i)=>`
+    <div class="mcard" style="animation-delay:${(i%12)*.045}s" onclick="openLb(${i})">
+      <img src="${m.src}" alt="${m.name}" loading="lazy">
+      <span class="ecetag">ECE</span>
+      <div class="movl">
+        <div class="movl-name">— ${m.name}</div>
+        <div class="movl-time">${m.t}</div>
+      </div>
+      <button class="lbtn ${liked.has(i)?'on':''}" onclick="toggleLike(event,${i})">
+        ${liked.has(i)?'❤️':'🤍'}
+      </button>
+    </div>`).join('');
+}
+
+function toggleLike(e,i){
+  e.stopPropagation();
+  liked.has(i)?liked.delete(i):liked.add(i);
+  renderWall();
+}
+
+/* ── COUNTS ── */
+function updateCounts(){
+  const n=mems.length;
+  document.getElementById('mcnt').textContent=n;
+  document.getElementById('wcnt').textContent=n+' photo'+(n!==1?'s':'');
+}
+
+/* ── TICKER ── */
+function updateTicker(){
+  if(!mems.length)return;
+  const row=document.getElementById('tickerRow');
+  const rots=[-4,3,-2,4,-3], ty=[-5,4,-3,6,3];
+  row.innerHTML=mems.slice(0,5).map((m,i)=>`
+    <div class="tcard" style="transform:rotate(${rots[i]}deg) translateY(${ty[i]}px)"
+         onclick="goTo('memories')">
+      <img src="${m.src}" alt="${m.name}">
+    </div>`).join('');
+}
+
+/* ── LIGHTBOX ── */
+function openLb(i){
+  lbIdx=i; const m=mems[i];
+  document.getElementById('lbImg').src=m.src;
+  document.getElementById('lbName').textContent=m.name;
+  document.getElementById('lbTime').textContent=m.t;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
+function lbNav(d){const n=lbIdx+d;if(n>=0&&n<mems.length)openLb(n);}
+function lbBg(e){if(e.target===document.getElementById('lb'))closeLb();}
+
+/* ── KEYBOARD ── */
+document.addEventListener('keydown',e=>{
+  const lb=document.getElementById('lb');
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowRight')lbNav(1);
+  if(e.key==='ArrowLeft')lbNav(-1);
+});
+
+/* ── TOAST ── */
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const t=document.createElement('div');
+  t.className='toast'; t.innerHTML=msg; document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2700);
+}
+
+renderWall(); updateCounts();
+</script>
+</body>
+</html>
